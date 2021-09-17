@@ -1,16 +1,23 @@
-%% This function is for generating MCMC series of parameters using GPS-ABC method.
+%% This function is for generating MCMC series of CONSTANT mutation rate based on BD model
 % Input: theta_mu: prior for theta, log scale
 %        theta_sigma: prior variance for theta, 0 if parameter is not
-%        estimated in this case.
-%        num_training_theta: 2 by p matrix, p is the number of parameters
-%        in total. The first line is for the initial setting and the second
-%        line is for requiring additional samples.
+%                     estimated in this case.
 %        param_range; a structure storing range of each parameter
-%        Y: observed echo
-%        model_specs: model specifications, including error threshold ksi,
-%        accuracy threshold eps, sampling size M, N is sample size.
-%        wavespecs: specifidations for wavelet compression 
-%        param_idx: index of parameters being estimated.
+%        obs_X: observed data
+%        model_spec: model specifications, including: 
+%                     num_training_theta: vector of 2, the number of training data points 
+%                                         for initial training and additional trainings.
+%                     eps: accuracy threshold, 
+%                     psi: error threshold
+%                     N: sample size
+%                     chkt: time checking point
+%                     a: parameter for birth-death process
+%                     num_rep: number of replicates at each training point
+%                     time_update: for showing progress
+%                     init_param: initial hyperparameters for GP surrogates
+%                     theta_old: initial values for the parameters to be estimated
+%                     bounds: bounds for the parameters to be estimated
+%                     trans_step: stepwidth for proposal distribution
 function [Sample] = ABC_mu(theta_mu, theta_sigma, param_range,obs_X, model_spec)
 
 S0 = model_spec.num_training_theta(1);
@@ -31,8 +38,6 @@ time_update = model_spec.time_update;
 init_param = model_spec.init_param;
 bounds = model_spec.bounds;
 
-%trans_step = [0.08,0.08,0.08];
-%trans_step = model_spec.trans_step;
 
 Y_m = mean(obs_X);
 Y_v = var(obs_X);

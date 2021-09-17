@@ -1,16 +1,25 @@
-%% This function is for generating MCMC series of parameters using GPS-ABC method.
+%% This function is for generating MCMC series of 
+%%  STAGEWISE mutation rates and changing time point based on BD model
 % Input: theta_mu: prior for theta, log scale
 %        theta_sigma: prior variance for theta, 0 if parameter is not
-%        estimated in this case.
-%        num_training_theta: 2 by p matrix, p is the number of parameters
-%        in total. The first line is for the initial setting and the second
-%        line is for requiring additional samples.
+%                     estimated in this case.
 %        param_range; a structure storing range of each parameter
-%        Y: observed echo
-%        model_specs: model specifications, including error threshold ksi,
-%        accuracy threshold eps, sampling size M, N is sample size.
-%        wavespecs: specifidations for wavelet compression 
-%        param_idx: index of parameters being estimated.
+%        obs_X: observed data
+%        model_spec: model specifications, including: 
+%                     num_training_theta: vector of 2, the number of training data points 
+%                                         for initial training and additional trainings.
+%                     eps: accuracy threshold, 
+%                     psi: error threshold
+%                     N: sample size
+%                     chkt: time checking point
+%                     a: parameter for birth-death process
+%                     num_rep: number of replicates at each training point
+%                     time_update: for showing progress
+%                     init_param: initial values of GP's hyperparameters.
+%                     theta_old: the initial values of parameters to be estimated.
+%                     model: the model version, "2" indicates the model with stagewise rates.
+%                     bounds: bounds for the parameters to be estimated
+%                     trans_step: stepwidth for proposal distribution
 function [Sample] = ABC_mu2(theta_mu, theta_sigma, param_range,obs_X, model_spec)
 
 S0 = model_spec.num_training_theta(1,:);
@@ -23,6 +32,7 @@ M = model_spec.M;
 N = model_spec.N;
 a = model_spec.a;
 chkt = model_spec.chkt;
+L = model_spec.L;
 
 num_rep = model_spec.num_rep;
 time_update = model_spec.time_update;
@@ -38,7 +48,7 @@ trans_step = model_spec.trans_step;
 Y_m = mean(obs_X);
 
 
-[theta_list, X] = getIniX2(a,param_range,chkt,S0, num_rep,time_update);
+[theta_list, X] = getIniX2(a,param_range,chkt,S0, num_rep,time_update, L);
 
 J = size(Y_m,2); % number of the features
 [param, model] = mleHomGP(theta_list,X,init_param,bounds);
@@ -88,7 +98,7 @@ for ss =  1:N
             break
         else
             [n_training,~,num_rep] = size(X);
-            [Theta_new, X_delta] = getIniX2(a,param_range_new,chkt,delta, num_rep,time_update);
+            [Theta_new, X_delta] = getIniX2(a,param_range_new,chkt,delta, num_rep,time_update,L);
             [n_training_delta,~,num_rep] = size(X_delta); 
             feat_delta = NaN(n_training_delta + n_training,J,num_rep);
             for k = 1:num_rep

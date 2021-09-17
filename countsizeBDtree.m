@@ -1,3 +1,9 @@
+%% Function of simulating population size and number of mutants
+%% This function is for constant mutation rate
+%% Input: a: initial population size
+%%        mu: mutation rate
+%%        chkt: time checking point for counting mutants.
+
 function [Nt, Xt] = countsizeBDtree(a, mu, chkt)
 
 Nt = 0;

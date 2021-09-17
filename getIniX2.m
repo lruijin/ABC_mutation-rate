@@ -1,4 +1,15 @@
-function [theta_list,Y] = getIniX2(a,param_range,chkt,num_training, num_rep,time_update)
+% This function is for getting training theta list as the input for BD model with stage wise mutation rates.
+% Input: a: parameter in birth death process of the initial culture size.
+%        param_range; a structure storing range of each parameter
+%        chkt: time checking point
+%        num_training: vector of 2, the number of training data points for initial training and additional trainings. 
+%        num_rep: number of replicates at each training point             
+%        time_update: for showing progress 
+%        L: number of bacteria in each culture
+% Output: theta_list: training points
+%         Y: Output from model
+
+function [theta_list,Y] = getIniX2(a,param_range,chkt,num_training, num_rep,time_update, L)
     [theta_list] = getThetaList(num_training,param_range);
     n_theta = size(theta_list,1);
     Y = NaN(n_theta,1,num_rep);
@@ -18,14 +29,18 @@ function [theta_list,Y] = getIniX2(a,param_range,chkt,num_training, num_rep,time
 %     else
         parfor i = 1:n_theta
             theta_temp = theta_list(i,:);
-            mu_vec_temp = [exp(theta_temp(1)) exp(theta_temp(2))];
-            t_temp = exp(theta_temp(3));
-            if mod(i, time_update/20) == 0 % screen print to show progress.
+            mu_vec_temp = [10^(theta_temp(1)) 10^(theta_temp(2))];
+            t_temp = 10^(theta_temp(3));
+            if mod(i, time_update/50) == 0 % screen print to show progress.
                fprintf(['i=', int2str(i),'\n']);
             end
             for j = 1:num_rep
-                [temp1, temp2] = countsizeBDtree2(a, mu_vec_temp,t_temp, chkt);
-                Y(i,1,j) = sqrt(sqrt(temp2/temp1));
+                tmp1 = NaN(L,1);
+                tmp2 = NaN(L,1);
+                for k = 1:L
+                    [tmp1(k), tmp2(k)] = countsizeBDtree2(a, mu_vec_temp,t_temp, chkt);
+                end
+                Y(i,1,j) = sqrt(sqrt(sum(tmp2)/sum(tmp1)));
             end
         end
 %     end

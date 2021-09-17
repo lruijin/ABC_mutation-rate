@@ -1,3 +1,13 @@
+% This is the function to propose new theta 
+% Input: 
+%   model: 1 constant mutation model; 2. stage-wise mutation rates
+%   trans_step: step width of proposal distribution
+%   theta_old: theta from last step
+%   param_range: the range for parameters
+% Output:
+%   theta: the new proposed theta
+%   param_range_new: the new parameter range
+
 function [theta,param_range_new] = get_theta(model,trans_step,theta_old,param_range)
 if model == 1
     pd = makedist('Normal','mu',theta_old,'sigma',trans_step);

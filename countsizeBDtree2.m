@@ -1,3 +1,11 @@
+%% Function of simulating population size and number of mutants
+%% This function is for stagewise mutation rates
+%% Input: a: initial population size
+%%        mu: mutation rate
+%%        chkt: time checking point for counting mutants.
+%% Output: Nt: population size at time t
+%%         Xt: number of mutants.
+
 function [Nt, Xt] = countsizeBDtree2(a, mu_vec, t_d,chkt)
 
 Nt = 0;
