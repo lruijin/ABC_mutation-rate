@@ -33,6 +33,7 @@ N = model_spec.N;
 a = model_spec.a;
 chkt = model_spec.chkt;
 L = model_spec.L;
+constraint = model_spec.constraint;
 
 num_rep = model_spec.num_rep;
 time_update = model_spec.time_update;
@@ -46,12 +47,15 @@ bounds = model_spec.bounds;
 trans_step = model_spec.trans_step;
 
 Y_m = mean(obs_X);
+%Y_sd = std(obs_X);
+%Feat = [Y_m, Y_sd];
 
 
-[theta_list, X] = getIniX2(a,param_range,chkt,S0, num_rep,time_update, L);
+[theta_list, X] = getIniX2(a,param_range,chkt,S0, num_rep,time_update, L, constraint);
 
 J = size(Y_m,2); % number of the features
 [param, model] = mleHomGP(theta_list,X,init_param,bounds);
+%[param_sd, model_sd] = mleHomGP(theta_list, std(X,[],3), init_param,bounds);
 
 theta_old = model_spec.theta_old;
 
@@ -62,13 +66,17 @@ for ss =  1:N
     if mod(ss, time_update) == 0 % screen print to show progress.
        fprintf(['ss=', int2str(ss),'\n']);
     end
-    [theta_new,param_range_new] = get_theta(model_num,trans_step,theta_old,param_range);
+    [theta_new,param_range_new] = get_theta(model_num,trans_step,theta_old,param_range, constraint);
     theta = [theta_new;theta_old];
     
     for iter = 1:5000
         alpha = NaN(M,J);  
-        [Mu_cond, Var_cond,nugs] = GPHomPrediction(theta,model,param);
-       for j = 1:J    
+       for j = 1:J
+            if j == 1
+                [Mu_cond, Var_cond,nugs] = GPHomPrediction(theta,model,param);
+            elseif j == 2
+                [Mu_cond, Var_cond,nugs] = GPHomPrediction(theta,model_sd,param_sd);
+            end
             Yj = Y_m(j);
 %             Muj = Mu_cond(:,j);
 %             Sigmaj = diag(Var_cond(:,j));
@@ -81,15 +89,30 @@ for ss =  1:N
         log_prior_dens = [tnorm([theta_new(1),theta_old(1)], theta_mu(1), theta_sigma(1), param_range(1,:));
                  tnorm([theta_new(2),theta_old(2)], theta_mu(2), theta_sigma(2), param_range(2,:)); 
                  tnorm([theta_new(3),theta_old(3)], theta_mu(3), theta_sigma(3), param_range(3,:))];
+        if constraint == 1
+            log_prior_dens(2,1) = tnorm(theta_new(2), theta_mu(2), theta_sigma(2), [theta_new(1),param_range(2,2)]);
+            log_prior_dens(2,2) = tnorm(theta_old(2), theta_mu(2), theta_sigma(2), [theta_old(1),param_range(2,2)]);
+        end
+        
         log_prior_ratio = sum(log_prior_dens(:,1) - log_prior_dens(:,2));
         %log_prior_ratio = 0;
         log_like_ratio = sum(alpha,2);
-        log_trans_dens_new = [tnorm(theta_new(1), theta_old(1), trans_step(1), param_range(1,:));
-            tnorm(theta_new(2), theta_old(2), trans_step(2), param_range(2,:));
-            tnorm(theta_new(3), theta_old(3), trans_step(3), param_range(3,:))];
-        log_trans_dens_old = [tnorm(theta_old(1), theta_new(1), trans_step(1), param_range(1,:));
-            tnorm(theta_old(2), theta_new(2), trans_step(2), param_range(2,:));
-            tnorm(theta_old(3), theta_new(3), trans_step(3), param_range(3,:));];
+        if constraint == 0
+            log_trans_dens_new = [tnorm(theta_new(1), theta_old(1), trans_step(1), param_range(1,:));
+                tnorm(theta_new(2), theta_old(2), trans_step(2), param_range(2,:));
+                tnorm(theta_new(3), theta_old(3), trans_step(3), param_range(3,:))];
+            log_trans_dens_old = [tnorm(theta_old(1), theta_new(1), trans_step(1), param_range(1,:));
+                tnorm(theta_old(2), theta_new(2), trans_step(2), param_range(2,:));
+                tnorm(theta_old(3), theta_new(3), trans_step(3), param_range(3,:))];
+        elseif constraint == 1
+            log_trans_dens_new = [tnorm(theta_new(1), theta_old(1), trans_step(1), param_range(1,:));
+                tnorm(theta_new(2), theta_old(2), trans_step(2), [theta_new(1),param_range(2,2)]);
+                tnorm(theta_new(3), theta_old(3), trans_step(3), param_range(3,:))];
+            log_trans_dens_old = [tnorm(theta_old(1), theta_new(1), trans_step(1), param_range(1,:));
+                tnorm(theta_old(2), theta_new(2), trans_step(2), [theta_old(1),param_range(2,2)]);
+                tnorm(theta_old(3), theta_new(3), trans_step(3), param_range(3,:))];
+        end
+        
         log_trans_ratio = sum(log_trans_dens_old - log_trans_dens_new); % all cancell out except the jacobian.
         
         Alpha =min([ones(M,1) exp(log_prior_ratio + log_like_ratio + log_trans_ratio)],[],2);
@@ -98,9 +121,9 @@ for ss =  1:N
             break
         else
             [n_training,~,num_rep] = size(X);
-            [Theta_new, X_delta] = getIniX2(a,param_range_new,chkt,delta, num_rep,time_update,L);
+            [Theta_new, X_delta] = getIniX2(a,param_range_new,chkt,delta, num_rep,time_update,L,constraint);
             [n_training_delta,~,num_rep] = size(X_delta); 
-            feat_delta = NaN(n_training_delta + n_training,J,num_rep);
+            feat_delta = NaN(n_training_delta + n_training,1,num_rep);
             for k = 1:num_rep
                 feat_delta((n_training + 1):(n_training_delta + n_training),:,k) = X_delta(:,:,k);
                 feat_delta(1:n_training,:,k) = X(:,:,k);
@@ -109,6 +132,7 @@ for ss =  1:N
             theta_list_new = [theta_list;Theta_new];
             theta_list = theta_list_new;
             [param, model] = mleHomGP(theta_list,X,init_param,bounds);
+            %[param_sd, model_sd] = mleHomGP(theta_list,std(X,[],3),init_param,bounds);
             for j = 1:size(param_range_new,1)
                 if param_range_new(j,1) == param_range_new(j,2)
                     param_range_new(j,:) = param_range_new(j,:);

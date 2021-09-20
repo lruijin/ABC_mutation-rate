@@ -8,7 +8,7 @@
 %   theta: the new proposed theta
 %   param_range_new: the new parameter range
 
-function [theta,param_range_new] = get_theta(model,trans_step,theta_old,param_range)
+function [theta,param_range_new] = get_theta(model,trans_step,theta_old,param_range, constraint)
 if model == 1
     pd = makedist('Normal','mu',theta_old,'sigma',trans_step);
     t = truncate(pd,param_range(1), param_range(2));
@@ -19,18 +19,50 @@ elseif model == 2
     theta = NaN(1,p);
     param_range_new = NaN(p,2);
     for i = 1:p
-        mu_temp = theta_old(i);
-        sig_temp = trans_step(i);
-        upper_temp = param_range(i,2);
-        lower_temp = param_range(i,1);
-        if sig_temp == 0
-            theta(i) = mu_temp;
-            param_range_new(i,:) = param_range(i,:);
-        else
-            pd = makedist('Normal','mu',mu_temp,'sigma',sig_temp);
-            t = truncate(pd,lower_temp, upper_temp);
-            theta(i) = random(t,1,1);
-            param_range_new(i,:) = [min(theta(i),mu_temp)-1e-8,max(theta(i),mu_temp)+1e-8];
+        if i == 2
+            if constraint == 0
+                mu_temp = theta_old(i);
+                sig_temp = trans_step(i);
+                upper_temp = param_range(i,2);
+                lower_temp = param_range(i,1);
+                if sig_temp == 0
+                    theta(i) = mu_temp;
+                    param_range_new(i,:) = param_range(i,:);
+                else
+                    pd = makedist('Normal','mu',mu_temp,'sigma',sig_temp);
+                    t = truncate(pd,lower_temp, upper_temp);
+                    theta(i) = random(t,1,1);
+                    param_range_new(i,:) = [min(theta(i),mu_temp)-1e-8,max(theta(i),mu_temp)+1e-8];
+                end
+            elseif constraint == 1
+                 mu_temp = theta_old(i);
+                 sig_temp = trans_step(i);
+                 upper_temp = param_range(i,2);
+                 lower_temp = theta(i-1);
+                 if sig_temp == 0
+                     theta(i) = mu_temp;
+                     param_range_new(i,:) = param_range(i,:);
+                 else
+                     pd = makedist('Normal','mu',mu_temp,'sigma',sig_temp);
+                     t = truncate(pd,lower_temp, upper_temp);
+                     theta(i) = random(t,1,1);
+                     param_range_new(i,:) = [min(theta(i),mu_temp)-1e-8,max(theta(i),mu_temp)+1e-8];
+                 end
+            end
+        else 
+            mu_temp = theta_old(i);
+            sig_temp = trans_step(i);
+            upper_temp = param_range(i,2);
+            lower_temp = param_range(i,1);
+            if sig_temp == 0
+                theta(i) = mu_temp;
+                param_range_new(i,:) = param_range(i,:);
+            else
+                pd = makedist('Normal','mu',mu_temp,'sigma',sig_temp);
+                t = truncate(pd,lower_temp, upper_temp);
+                theta(i) = random(t,1,1);
+                param_range_new(i,:) = [min(theta(i),mu_temp)-1e-8,max(theta(i),mu_temp)+1e-8];
+            end
         end
     end
 else 

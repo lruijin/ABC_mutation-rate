@@ -9,8 +9,8 @@
 % Output: theta_list: training points
 %         Y: Output from model
 
-function [theta_list,Y] = getIniX2(a,param_range,chkt,num_training, num_rep,time_update, L)
-    [theta_list] = getThetaList(num_training,param_range);
+function [theta_list,Y] = getIniX2(a,param_range,chkt,num_training, num_rep,time_update, L, constraint)
+    [theta_list] = getThetaList(num_training,param_range, constraint);
     n_theta = size(theta_list,1);
     Y = NaN(n_theta,1,num_rep);
 %     if use_parfor == 1
@@ -30,7 +30,7 @@ function [theta_list,Y] = getIniX2(a,param_range,chkt,num_training, num_rep,time
         parfor i = 1:n_theta
             theta_temp = theta_list(i,:);
             mu_vec_temp = [10^(theta_temp(1)) 10^(theta_temp(2))];
-            t_temp = 10^(theta_temp(3));
+            t_temp = theta_temp(3);
             if mod(i, time_update/50) == 0 % screen print to show progress.
                fprintf(['i=', int2str(i),'\n']);
             end
@@ -45,9 +45,14 @@ function [theta_list,Y] = getIniX2(a,param_range,chkt,num_training, num_rep,time
         end
 %     end
 end
-function[theta_list] = getThetaList(num_training,param_range)
+function[theta_list] = getThetaList(num_training,param_range, constraint)
     lhs = lhsdesign(num_training,size(param_range,1));
-    theta_list = repmat(param_range(:,1)',num_training,1)+ lhs.*repmat((param_range(:,2) - param_range(:,1))',num_training,1);
+    theta_list = repmat(param_range(:,1)',num_training,1) + ...
+            lhs.*repmat((param_range(:,2) - param_range(:,1))',num_training,1);
+    if constraint == 1
+        theta_list(:,2) = theta_list(:,1) + lhs(:,2) .* (param_range(2,2) - theta_list(:,1));
+    end
+    
 end
 % function [theta_list] = getThetaList(num_training,param_range)
 %     if length(find(num_training>0))==1 % this is the 1-d case
@@ -63,7 +68,7 @@ end
 %             if param_range(1,1)~=param_range(1,2)
 %                 error('param_range does not match with num_training_theta!');
 %             end
-%             theta_list1 = param_range(1,1); % if 0, we will fix theta at one of its bound.  
+%             theta_list1 = param_Srange(1,1); % if 0, we will fix theta at one of its bound.  
 %         end
 %     
 %         if  num_training(2)>0
