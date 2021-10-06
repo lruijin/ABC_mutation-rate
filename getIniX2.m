@@ -27,22 +27,23 @@ function [theta_list,Y] = getIniX2(a,param_range,chkt,num_training, num_rep,time
 %             end
 %         end
 %     else
-        parfor i = 1:n_theta
-            theta_temp = theta_list(i,:);
-            mu_vec_temp = [10^(theta_temp(1)) 10^(theta_temp(2))];
-            t_temp = theta_temp(3);
-            if mod(i, time_update/50) == 0 % screen print to show progress.
-               fprintf(['i=', int2str(i),'\n']);
-            end
-            for j = 1:num_rep
-                tmp1 = NaN(L,1);
-                tmp2 = NaN(L,1);
-                for k = 1:L
-                    [tmp1(k), tmp2(k)] = countsizeBDtree2(a, mu_vec_temp,t_temp, chkt);
+            parfor i = 1:n_theta
+                theta_temp = theta_list(i,:);
+                mu_vec_temp = [10^(theta_temp(1)) 10^(theta_temp(2))];
+                t_temp = theta_temp(3);
+                if mod(i, time_update/50) == 0 % screen print to show progress.
+                    fprintf(['i=', int2str(i),'\n']);
                 end
+                for j = 1:num_rep
+                    tmp1 = NaN(L,1);
+                    tmp2 = NaN(L,1);
+                    for k = 1:L
+                    [tmp1(k), tmp2(k)] = countsizeBDtree2(a, mu_vec_temp,t_temp, chkt);
+                    end
                 Y(i,1,j) = sqrt(sqrt(sum(tmp2)/sum(tmp1)));
+                end
             end
-        end
+        
 %     end
 end
 function[theta_list] = getThetaList(num_training,param_range, constraint)
@@ -50,7 +51,8 @@ function[theta_list] = getThetaList(num_training,param_range, constraint)
     theta_list = repmat(param_range(:,1)',num_training,1) + ...
             lhs.*repmat((param_range(:,2) - param_range(:,1))',num_training,1);
     if constraint == 1
-        theta_list(:,2) = theta_list(:,1) + lhs(:,2) .* (param_range(2,2) - theta_list(:,1));
+        idx = theta_list(:,2) > theta_list(:,1);
+        theta_list = theta_list(idx,:);
     end
     
 end

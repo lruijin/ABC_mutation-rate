@@ -89,29 +89,16 @@ for ss =  1:N
         log_prior_dens = [tnorm([theta_new(1),theta_old(1)], theta_mu(1), theta_sigma(1), param_range(1,:));
                  tnorm([theta_new(2),theta_old(2)], theta_mu(2), theta_sigma(2), param_range(2,:)); 
                  tnorm([theta_new(3),theta_old(3)], theta_mu(3), theta_sigma(3), param_range(3,:))];
-        if constraint == 1
-            log_prior_dens(2,1) = tnorm(theta_new(2), theta_mu(2), theta_sigma(2), [theta_new(1),param_range(2,2)]);
-            log_prior_dens(2,2) = tnorm(theta_old(2), theta_mu(2), theta_sigma(2), [theta_old(1),param_range(2,2)]);
-        end
         
         log_prior_ratio = sum(log_prior_dens(:,1) - log_prior_dens(:,2));
         %log_prior_ratio = 0;
         log_like_ratio = sum(alpha,2);
-        if constraint == 0
-            log_trans_dens_new = [tnorm(theta_new(1), theta_old(1), trans_step(1), param_range(1,:));
-                tnorm(theta_new(2), theta_old(2), trans_step(2), param_range(2,:));
-                tnorm(theta_new(3), theta_old(3), trans_step(3), param_range(3,:))];
-            log_trans_dens_old = [tnorm(theta_old(1), theta_new(1), trans_step(1), param_range(1,:));
-                tnorm(theta_old(2), theta_new(2), trans_step(2), param_range(2,:));
-                tnorm(theta_old(3), theta_new(3), trans_step(3), param_range(3,:))];
-        elseif constraint == 1
-            log_trans_dens_new = [tnorm(theta_new(1), theta_old(1), trans_step(1), param_range(1,:));
-                tnorm(theta_new(2), theta_old(2), trans_step(2), [theta_new(1),param_range(2,2)]);
-                tnorm(theta_new(3), theta_old(3), trans_step(3), param_range(3,:))];
-            log_trans_dens_old = [tnorm(theta_old(1), theta_new(1), trans_step(1), param_range(1,:));
-                tnorm(theta_old(2), theta_new(2), trans_step(2), [theta_old(1),param_range(2,2)]);
-                tnorm(theta_old(3), theta_new(3), trans_step(3), param_range(3,:))];
-        end
+        log_trans_dens_new = [tnorm(theta_new(1), theta_old(1), trans_step(1), param_range(1,:));
+            tnorm(theta_new(2), theta_old(2), trans_step(2), param_range(2,:));
+            tnorm(theta_new(3), theta_old(3), trans_step(3), param_range(3,:))];
+        log_trans_dens_old = [tnorm(theta_old(1), theta_new(1), trans_step(1), param_range(1,:));
+            tnorm(theta_old(2), theta_new(2), trans_step(2), param_range(2,:));
+            tnorm(theta_old(3), theta_new(3), trans_step(3), param_range(3,:))];
         
         log_trans_ratio = sum(log_trans_dens_old - log_trans_dens_new); % all cancell out except the jacobian.
         
