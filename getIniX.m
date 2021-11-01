@@ -11,7 +11,7 @@
 %        mutations
 %        num_training: the number of replications at each design points
 
-function [logmu,Y] = getIniX(a,logmu_range,chkt,num_training, num_rep,time_update)
+function [logmu,Y] = getIniX(a,logmu_range,chkt,num_training, num_rep,time_update, L)
     Y = NaN(num_training,1,num_rep);
     logmu = linspace(logmu_range(1),logmu_range(2), num_training)';
     parfor i = 1:num_training
@@ -20,8 +20,12 @@ function [logmu,Y] = getIniX(a,logmu_range,chkt,num_training, num_rep,time_updat
            fprintf(['i=', int2str(i),'\n']);
         end
         for j = 1:num_rep
-            [temp1, temp2] = countsizeBDtree(a, mu_temp, chkt);
-            Y(i,1,j) = sqrt(temp2/temp1);
+            temp1 = NaN(L,1);
+            tmpe2 = NaN(L,2);
+            for k = 1:L
+              [temp1(k), temp2(k)] = countsizeBDtree(a, mu_temp, chkt);
+            end
+            Y(i,1,j) = sqrt(sum(temp2)/sum(temp1));
         end
     end
 end

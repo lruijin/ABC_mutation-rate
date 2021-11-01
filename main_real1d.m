@@ -27,6 +27,7 @@ model_spec.a = 1;
 model_spec.chkt = 19;
 model_spec.num_rep = 4;
 model_spec.time_update = 1000;
+model_spec.L = 90;
 
 model_spec.init_param = [6;1e-4];
 model_spec.bounds.upper = 8;

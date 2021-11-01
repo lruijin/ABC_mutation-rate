@@ -33,6 +33,7 @@ chkt = model_spec.chkt;
 
 num_rep = model_spec.num_rep;
 time_update = model_spec.time_update;
+L = model_spec.L;
 
 %kern_param = [0.01,0.4];
 init_param = model_spec.init_param;
@@ -42,7 +43,7 @@ bounds = model_spec.bounds;
 Y_m = mean(obs_X);
 Y_v = var(obs_X);
 
-[theta_list, X] = getIniX(a,param_range,chkt,S0, num_rep,time_update);
+[theta_list, X] = getIniX(a,param_range,chkt,S0, num_rep,time_update,L);
 
 J = size(Y_m,2); % number of the features
 [param, model] = mleHomGP(theta_list,X,init_param,bounds);
@@ -86,7 +87,7 @@ for ss =  1:N
             break
         else
             [n_training,~,num_rep] = size(X);
-            [Theta_new, X_delta] = getIniX(a,param_range_new,chkt,delta, num_rep,time_update);
+            [Theta_new, X_delta] = getIniX(a,param_range_new,chkt,delta, num_rep,time_update,L);
             [n_training_delta,~,num_rep] = size(X_delta); 
             feat_delta = NaN(n_training_delta + n_training,J,num_rep);
             for k = 1:num_rep
