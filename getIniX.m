@@ -15,13 +15,13 @@ function [logmu,Y] = getIniX(a,logmu_range,chkt,num_training, num_rep,time_updat
     Y = NaN(num_training,1,num_rep);
     logmu = linspace(logmu_range(1),logmu_range(2), num_training)';
     parfor i = 1:num_training
-        mu_temp = exp(logmu(i));
+        mu_temp = 10^(logmu(i));
         if mod(i, time_update/20) == 0 % screen print to show progress.
            fprintf(['i=', int2str(i),'\n']);
         end
         for j = 1:num_rep
             temp1 = NaN(L,1);
-            tmpe2 = NaN(L,2);
+            temp2 = NaN(L,1);
             for k = 1:L
               [temp1(k), temp2(k)] = countsizeBDtree(a, mu_temp, chkt);
             end
