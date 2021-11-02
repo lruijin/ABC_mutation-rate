@@ -78,7 +78,7 @@ model_spec.theta_old = [-4 -3 4.5]; % t_d = 4  % The initial value of the three 
 
 %%%%%%%%% Step 2: Piecewise Constant mutation rates estimation %%%%%%%%%%%%%%%%%%%
 
-% POOL = parpool('local',20);                  % uncomment it if multiple runs are needed
+POOL = parpool('local',20);                  % always keep this as ABC_mu2 function contains parallel computations for fitting GP model.
 for seed = 1:1
     load(strcat('~/ABC/simulation/data/t4/nmc100/Y',num2str(seed),'.mat'))
     theta_mu = [log10(MOM)-1 log10(MOM)+1 4.5];   % Initial value corresponding to MOM estimator`
@@ -89,4 +89,4 @@ for seed = 1:1
     % save the sample with its model specification, acceptance rate and running time.
     save(strcat('~/ABC/simulation/results/t4/sample',num2str(seed),'_nmc100.mat'), 'sample','acc_rate','model_spec','tEnd', 'param_range');
 end
-% delete(POOL);
+delete(POOL);
