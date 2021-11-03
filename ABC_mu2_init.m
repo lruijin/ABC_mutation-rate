@@ -20,7 +20,7 @@
 %                     model: the model version, "2" indicates the model with stagewise rates.
 %                     bounds: bounds for the parameters to be estimated
 %                     trans_step: stepwidth for proposal distribution
-function [Sample] = ABC_mu2(theta_mu, theta_sigma, param_range,obs_X, theta_list, X, model_spec)
+function [Sample] = ABC_mu2_init(theta_mu, theta_sigma, param_range,obs_X, theta_list, X, model_spec)
 
 S0 = model_spec.num_training_theta(1,:);
 delta = model_spec.num_training_theta(2,:);
@@ -38,24 +38,19 @@ constraint = model_spec.constraint;
 num_rep = model_spec.num_rep;
 time_update = model_spec.time_update;
 
-%kern_param = [0.01,0.4];
 init_param = model_spec.init_param;
 model_num = model_spec.model;
 bounds = model_spec.bounds;
 
-%trans_step = [0.08,0.08,0.08];
 trans_step = model_spec.trans_step;
 range_width =(param_range(:,2)' - param_range(:,1)');
-Y_m = log(mean(obs_X) + 1e-8);
-%Y_sd = std(obs_X);
-%Feat = [Y_m, Y_sd];
+Y_m = mean(obs_X);
 
-J = size(Y_m,2); % number of the features
-theta_list_s = (theta_list - repmat(param_range(:,1)', size(theta_list,1),1)) ./...
-               repmat(range_width,size(theta_list,1),1);
+J = size(Y_m,2);
+%theta_list_s = (theta_list - repmat(param_range(:,1)', size(theta_list,1),1)) ./...
+%               repmat(range_width,size(theta_list,1),1);
                
-[param, model] = mleHomGP(theta_list_s,log(mean(X,3) + 1e-8),init_param,bounds);
-%[param_sd, model_sd] = mleHomGP(theta_list, std(X,[],3), init_param,bounds);
+[param, model] = mleHomGP(theta_list, X, init_param,bounds);
 
 theta_old = model_spec.theta_old;
 
@@ -68,12 +63,10 @@ for ss =  1:N
     end
     [theta_new,param_range_new] = get_theta(model_num,trans_step,theta_old,param_range, constraint);
     theta = [theta_new;theta_old];
-    theta_s = (theta - repmat(param_range(:,1)', 2,1)) ./...
-               repmat(range_width,2,1);
     for iter = 1:5000
         alpha = NaN(M,J);  
         for j = 1:J
-            [Mu_cond, Var_cond,nugs] = GPHomPrediction(theta_s,model,param);
+            [Mu_cond, Var_cond,nugs] = GPHomPrediction(theta,model,param);
             Yj = Y_m(j);
 %             Muj = Mu_cond(:,j);
 %             Sigmaj = diag(Var_cond(:,j));
@@ -106,8 +99,6 @@ for ss =  1:N
         else
             [n_training,~,num_rep] = size(X);
             [Theta_new, X_delta] = getIniX2(a,param_range_new,chkt,delta, num_rep,time_update,L,constraint);
-            Theta_new_s = (Theta_new - repmat(param_range(:,1)', size(Theta_new,1),1)) ./...
-                repmat(range_width,size(Theta_new,1),1);
             [n_training_delta,~,num_rep] = size(X_delta); 
             feat_delta = NaN(n_training_delta + n_training,1,num_rep);
             for k = 1:num_rep
@@ -115,10 +106,9 @@ for ss =  1:N
                 feat_delta(1:n_training,:,k) = X(:,:,k);
             end
             X = feat_delta;
-            theta_list_new_s = [theta_list_s;Theta_new_s];
-            theta_list_s = theta_list_new_s;
-            [param, model] = mleHomGP(theta_list_s,log(mean(X,3) + 1e-8),init_param,bounds);
-            %[param_sd, model_sd] = mleHomGP(theta_list,std(X,[],3),init_param,bounds);
+            theta_list_new = [theta_list;Theta_new];
+            theta_list = theta_list_new;
+            [param, model] = mleHomGP(theta_list,X,init_param,bounds);
             for j = 1:size(param_range_new,1)
                 if param_range_new(j,1) == param_range_new(j,2)
                     param_range_new(j,:) = param_range_new(j,:);
