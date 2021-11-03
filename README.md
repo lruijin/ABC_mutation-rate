@@ -3,16 +3,16 @@
 This software package includes the source code (mostly in MATLAB) for our manuscript "Estimating mutation rates in a Markov branching process using approximate Bayesian computation". There are three parts in the package: I. Simulation study 1 (for the constant mutation scenario), II. Simulation study 2 (for the piece-wise constant mutation scenario), and III. Real data analysis.
 
 ## I. Simulation study 1
---simu1B_cascades.m: Simulation study 1 (for GPS-ABC). *Note*: due to intensive computations, simu1B_cascades.m and simu1A_cascades.m run on servers.
---simu1A_cascades.m: Simulation study 1 (for ABC-MCMC). *Warning*: running ABC-MCMC in this simulation study takes significant amount of time.
---MOMMLE_fluc_exp1.m: Estimate mutation rate by MOM and MLE for fluctuation data with constant mutation rate. Used in simu1B_cascades.m.
---ABC_fluc_exp1.m: Estimate mutation rate by ABC for fluctuation data with constant mutation rate. Used in simu1A_cascades.m and simu1B_cascades.m.
---trainGPS.m: Train GPS model for fluctuation data with constant mutation rate. Used in ABC_fluc_exp1.m, also in demoGPS_fluc_exp1.m.
---tnrnd.m: Generate random sample from truncated normal. Used in ABC_fluc_exp1.m.
---fluc_exp1.m: Generate fluctuation data in parallel cultures from bMBP model with constant mutation rate. Used everywhere.
---mut_bMBP.m: Generate (z, x) data in a single culture from bMBP model with constant mutation rate. Used in fluc_exp1.m.
---selectstat_fluc_exp1.m: Compare the response curves of three different summary statistics (Fig. 1).
---demoGPS_fluc_exp1.m: Demonstrate the performance of GP regression (Fig. 2).
+-simu1B_cascades.m: Simulation study 1 (for GPS-ABC). *Note*: due to intensive computations, simu1B_cascades.m and simu1A_cascades.m run on servers.
+-simu1A_cascades.m: Simulation study 1 (for ABC-MCMC). *Warning*: running ABC-MCMC in this simulation study takes significant amount of time.
+-MOMMLE_fluc_exp1.m: Estimate mutation rate by MOM and MLE for fluctuation data with constant mutation rate. Used in simu1B_cascades.m.
+-ABC_fluc_exp1.m: Estimate mutation rate by ABC for fluctuation data with constant mutation rate. Used in simu1A_cascades.m and simu1B_cascades.m.
+-trainGPS.m: Train GPS model for fluctuation data with constant mutation rate. Used in ABC_fluc_exp1.m, also in demoGPS_fluc_exp1.m.
+-tnrnd.m: Generate random sample from truncated normal. Used in ABC_fluc_exp1.m.
+-fluc_exp1.m: Generate fluctuation data in parallel cultures from bMBP model with constant mutation rate. Used everywhere.
+-mut_bMBP.m: Generate (z, x) data in a single culture from bMBP model with constant mutation rate. Used in fluc_exp1.m.
+-selectstat_fluc_exp1.m: Compare the response curves of three different summary statistics (Fig. 1).
+-demoGPS_fluc_exp1.m: Demonstrate the performance of GP regression (Fig. 2).
 
 ## II. Simulation study 2
 --simulation2_main.m: Simulation study 2 (for GPS-ABC only). It contains the following steps:
