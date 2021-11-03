@@ -105,6 +105,7 @@ delete(POOL)
 % You can speed up the process by calling in the initial samples provided in theta_list_full.mat.
 POOL = parpool('local',32);
 load('theta_list_full.mat')
+obs_X = sqrt(obs_X3);
 sample = ABC_mu2_init(theta_mu, theta_sigma, param_range, obs_X, theta_list, X, model_spec);
 delete(POOL)
 save('real_sample_xi35.mat','sample','model_spec','param_range','theta_mu');
