@@ -21,6 +21,7 @@ This software package includes the source code (mostly in MATLAB) for our manusc
     * set the current folder as the working directory
     * add the three folders in the current folder by "addpath". They contain backend functions for fitting GP model, speeding up matrix operation, and optimization.
 3. Obtain posterior samples with simulated data, using function ABC_mu2.m.
+
 *Note*: The detailed model specifications are described as comments in the script.    
 
 ## III. Real data analysis
