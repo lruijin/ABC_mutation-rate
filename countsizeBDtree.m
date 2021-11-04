@@ -1,6 +1,6 @@
 %% Function of simulating population size and number of mutants
 %% This function is for constant mutation rate
-%% Input: a: initial population size
+%% Input: a: exponential rate
 %%        mu: mutation rate
 %%        chkt: time checking point for counting mutants.
 

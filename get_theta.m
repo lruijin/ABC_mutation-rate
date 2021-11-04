@@ -1,6 +1,6 @@
-% This is the function to propose new theta 
+% This is the function for proposing new theta 
 % Input: 
-%   model: 1 constant mutation model; 2. stage-wise mutation rates
+%   model: 1. constant mutation model; 2. piece-wise constant mutation rates
 %   trans_step: step width of proposal distribution
 %   theta_old: theta from last step
 %   param_range: the range for parameters

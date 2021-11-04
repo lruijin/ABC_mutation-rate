@@ -1,6 +1,6 @@
 %% Function of simulating population size and number of mutants
-%% This function is for stagewise mutation rates
-%% Input: a: initial population size
+%% This function is for piece-wise constant mutation rates
+%% Input: a: exponential rate
 %%        mu: mutation rate
 %%        chkt: time checking point for counting mutants.
 %% Output: Nt: population size at time t

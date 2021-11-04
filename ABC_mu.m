@@ -1,4 +1,4 @@
-%% This function is for generating MCMC series of CONSTANT mutation rate based on BD model
+%% This function is for generating MCMC posterior samples of constant mutation rate based on bMBP model
 % Input: theta_mu: prior for theta, log scale
 %        theta_sigma: prior variance for theta, 0 if parameter is not
 %                     estimated in this case.

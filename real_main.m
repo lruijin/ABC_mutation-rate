@@ -1,4 +1,4 @@
-%%%%%%%%%%%%%%%%%% Part 0: add pathes of all functions %%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%% Part 0: add paths of all functions %%%%%%%%%%%%%%%%%%%%%
 cd('~/ABC/code');
 addpath('~/ABC/code/kernel')
 addpath('~/ABC/code/lightspeed')
@@ -58,7 +58,7 @@ delete(POOL)
 acc_rate = sum(diff(sample)~=0) / model_spec.N;
 
 
-%%%%%%%%%%%%%%%%%% Part 3: piecewise mutation rates estimation %%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%% Part 3: piece-wise constant mutation rates estimation %%%%%%%%%%%%%%%
 % reset the working space and load in data and functions again
 clear;
 cd('~/ABC/code');

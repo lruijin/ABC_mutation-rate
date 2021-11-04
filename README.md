@@ -18,7 +18,7 @@ This software package includes the source code (mostly in MATLAB) for our manusc
 * simulation2_main.m: Simulation study 2 (for GPS-ABC only). It contains the following steps:
 1. Generate fluctuation data from bMBP model with piecewise constant mutation rates, using function countsizeBDtree2.m.
 2. Source functions by
-    * set the current folder as the working directory
+    * set the current folder as the working directory,
     * add the three folders in the current folder by "addpath". They contain backend functions for fitting GP model, speeding up matrix operation, and optimization.
 3. Obtain posterior samples with simulated data, using function ABC_mu2.m.
 

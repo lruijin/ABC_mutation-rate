@@ -1,6 +1,6 @@
-%%%%%%%%%%%%%%%%%%%%%%%%% Part 1: generate data %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%% Step 1: set the hyperparameters %%%%%%%%%%%%%%%%%%%
-% Geometry distribution's parameter a, typically 1 
+%%%%%%%%%%%%%%%%%%%%%%%%% Part 1: Generate data %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%% Step 1: Set the hyperparameters %%%%%%%%%%%%%%%%%%%
+% Exponential rate parameter a, typically 1 
 a = 1;
 % Two-stage mutations rates
 mu_vec = 10.^[-5 -3];
@@ -11,7 +11,7 @@ chkt = 11;
 % Total number of cultures
 nmc = 100;
 
-%%%%%%%%%%%%%%%%%%%%%%%%% Step 2: Generate Date %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%% Step 2: Generate fluctuation data %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Get multiple local workers
 POOL = parpool('local',20);
 % Set seeds
@@ -76,7 +76,7 @@ model_spec.model = 2;                          % which model to be used: 2 is th
 model_spec.trans_step = [0.3 0.3 0.4];         % The transition steps of the MCMC algorithm 
 model_spec.theta_old = [-4 -3 4.5]; % t_d = 4  % The initial value of the three parameters
 
-%%%%%%%%% Step 2: Piecewise Constant mutation rates estimation %%%%%%%%%%%%%%%%%%%
+%%%%%%%%% Step 2: Piece-wise constant mutation rates estimation %%%%%%%%%%%%%%%%%%%
 
 POOL = parpool('local',20);                  % always keep this as ABC_mu2 function contains parallel computations for fitting GP model.
 for seed = 1:100                             % change seed range to run less cases, each takes around 40 minutes.

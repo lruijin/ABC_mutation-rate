@@ -1,5 +1,5 @@
-%% This function is for generating MCMC series of 
-%%  STAGEWISE mutation rates and changing time point based on BD model
+%% This function is for generating MCMC posterior samples of 
+%% piece-wise constant mutation rates and changing time point based on bMBP model
 % Input: theta_mu: prior for theta, log scale
 %        theta_sigma: prior variance for theta, 0 if parameter is not
 %                     estimated in this case.
@@ -17,7 +17,7 @@
 %                     time_update: for showing progress
 %                     init_param: initial values of GP's hyperparameters.
 %                     theta_old: the initial values of parameters to be estimated.
-%                     model: the model version, "2" indicates the model with stagewise rates.
+%                     model: the model version, "2" indicates the model with piece-wise constant rates.
 %                     bounds: bounds for the parameters to be estimated
 %                     trans_step: stepwidth for proposal distribution
 function [Sample] = ABC_mu2_init(theta_mu, theta_sigma, param_range,obs_X, theta_list, X, model_spec)

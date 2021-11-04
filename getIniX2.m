@@ -1,5 +1,5 @@
-% This function is for getting training theta list as the input for BD model with stage wise mutation rates.
-% Input: a: parameter in birth death process of the initial culture size.
+% This function is for getting training theta list as the input for bMBP model with piece-wise constant mutation rates.
+% Input: a: rate parameter of the bMBP model.
 %        param_range; a structure storing range of each parameter
 %        chkt: time checking point
 %        num_training: vector of 2, the number of training data points for initial training and additional trainings. 
@@ -46,6 +46,7 @@ function [theta_list,Y] = getIniX2(a,param_range,chkt,num_training, num_rep,time
         
 %     end
 end
+
 function[theta_list] = getThetaList(num_training,param_range, constraint)
     lhs = lhsdesign(num_training,size(param_range,1));
     theta_list = repmat(param_range(:,1)',num_training,1) + ...

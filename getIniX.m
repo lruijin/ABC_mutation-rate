@@ -2,11 +2,11 @@
 % Output: logmu: the design matrix
 %         Y: the corresponding quantity of interest, here is the square
 %         root of observed mutation rate
-% Input: a: the parameter for the birth-death process model, for the
+% Input: a: the parameter for the bMBP model, for the
 %           lifetime of the first generation, which follows a exponential
 %           distribution
 %        logmu_range: the range to obtain the design matrix
-%        chkt: parameter of the birth-death process model, the time
+%        chkt: parameter of the bMBP model, the time
 %        checking point to observer the number of cells and the number of
 %        mutations
 %        num_training: the number of replications at each design points
@@ -29,8 +29,8 @@ function [logmu,Y] = getIniX(a,logmu_range,chkt,num_training, num_rep,time_updat
         end
     end
 end
-function [Nt, Xt] = countsizeBDtree(a, mu, chkt)
 
+function [Nt, Xt] = countsizeBDtree(a, mu, chkt)
 Nt = 0;
 Xt = 0;
 n = 1; % the number of particles in the first generation
