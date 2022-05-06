@@ -1,6 +1,6 @@
 # Code for "Estimating mutation rates in a Markov branching process using approximate Bayesian computation"
 
-This software package includes the source code (mostly in MATLAB) for our manuscript "Estimating mutation rates in a Markov branching process using approximate Bayesian computation". This package includes two sets of ABC estimators based on the "exact" simulator and the fast simulator, respectively. When mutation rates are at the scale less than $ < 10^{-5}$, the exact simulators ``countsizeBDtree.m`` and ``countsizeBDtree2.m`` are very slow. Estimators based on the fast simulator in folder ``code_rev`` are then used. There are three parts in the package: I. Simulation study 1 (for the constant mutation scenario), II. Simulation study 2 (for the piece-wise constant mutation scenario), and III. Real data analysis. 
+This software package includes the source code (mostly in MATLAB) for our manuscript "Estimating mutation rates in a Markov branching process using approximate Bayesian computation". This package includes two sets of ABC estimators based on the "exact" simulator and the fast simulator, respectively. When mutation rates are at the scale less than $ < 10^{-5}$, the exact simulators `mut_bMBP.m` and `countsizeBDtree2.m` are very slow. Estimators based on the fast simulator in folder `code_rev` are then used. There are three parts in the package: I. Simulation study 1 (for the constant mutation scenario), II. Simulation study 2 (for the piece-wise constant mutation scenario), and III. Real data analysis. 
 
 ## I. Simulation study 1
 * For large mutation rate:
@@ -19,12 +19,12 @@ Codes and instructions are in the folder `code_rev`.
 
 ## II. Simulation study 2
 * For large mutation rate:
-** simulation2_main.m: Simulation study 2 (for GPS-ABC only). It contains the following steps:
-1. Generate fluctuation data from bMBP model with piecewise constant mutation rates, using function countsizeBDtree2.m.
-2. Source functions by
-    * set the current folder as the working directory,
-    * add the three folders in the current folder by "addpath". They contain backend functions for fitting GP model, speeding up matrix operation, and optimization.
-3. Obtain posterior samples with simulated data, using function ABC_mu2.m.
+    * simulation2_main.m: Simulation study 2 (for GPS-ABC only). It contains the following steps:
+    1. Generate fluctuation data from bMBP model with piecewise constant mutation rates, using function countsizeBDtree2.m.
+    2. Source functions by
+        * set the current folder as the working directory,
+        * add the three folders in the current folder by "addpath". They contain backend functions for fitting GP model, speeding up matrix operation, and optimization.
+    3. Obtain posterior samples with simulated data, using function ABC_mu2.m.
 
 * For small mutation rate:
 Codes and instructions are in the folder `code_rev`.
