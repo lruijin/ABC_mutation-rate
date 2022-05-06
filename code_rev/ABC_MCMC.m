@@ -1,12 +1,13 @@
 %% This function is for generating MCMC posterior samples of 
-%% piece-wise constant mutation rates and changing time point based on bMBP model
+%% constant the mutation rate based on bMBP model using ABC-MCMC estimator
 % Input: theta_mu: prior for theta, log scale
-%        theta_sigma: prior variance for theta, 0 if parameter is not
-%                     estimated in this case.
-%        param_range; a structure storing range of each parameter
-%        obs_X: observed data
+%        theta_sigma: prior standard deviation for theta
+%        a_dt: the relative growth rate, a fixed number.
+%        p_range; a vector storing range of the mutation rate (in log scale)
+%        obs_X: observed data (4th root of the mutation freq)
 %        model_spec: model specifications, including: 
-  %                     num_training_theta: vector of 2, the number of training data points 
+%                    M: number of samples each proposed 
+%                    num_training_theta: vector of 2, the number of training data points 
 %                                         for initial training and additional trainings.
 %                     eps: accuracy threshold, 
 %                     psi: error threshold
