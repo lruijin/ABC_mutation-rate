@@ -27,6 +27,7 @@ Codes and instructions are in the folder `code_rev`.
 
 * For small mutation rate:
 Codes and instructions are in the folder `code_rev`.
+
 *Note*: The detailed model specifications are described as comments in the script.    
 
 ## III. Real data analysis
