@@ -20,52 +20,55 @@
 %                     model: the model version, "2" indicates the model with piece-wise constant rates.
 %                     bounds: bounds for the parameters to be estimated
 %                     trans_step: stepwidth for proposal distribution
-function [Sample] = ABC_mu2(theta_mu, theta_sigma, param_range,obs_X, model_spec)
+function [Sample] = ABC_mu2(theta_mu, theta_sigma, dt_range, p_range, obs_X, model_spec)
 
-S0 = model_spec.num_training_theta(1,:);
-delta = model_spec.num_training_theta(2,:);
-p = length(theta_mu);   %length(theta_mu)
+    S0 = model_spec.num_training_theta(1,:);
+    delta = model_spec.num_training_theta(2,:);
+    p = length(theta_mu);   %length(theta_mu)
 
-ksi = model_spec.ksi;
-eps = model_spec.eps ;
-M = model_spec.M;
-N = model_spec.N;
-a = model_spec.a;
-chkt = model_spec.chkt;
-L = model_spec.L;
-constraint = model_spec.constraint;
+    ksi = model_spec.ksi;
+    eps = model_spec.eps ;
+    M = model_spec.M;
+    N = model_spec.N;
+    a = model_spec.a;
+    chkt = model_spec.chkt;
+    L = model_spec.L;
+    constraint = model_spec.constraint;
 
-num_rep = model_spec.num_rep;
-time_update = model_spec.time_update;
+    num_rep = model_spec.num_rep;
+    time_update = model_spec.time_update;
 
-%kern_param = [0.01,0.4];
-init_param = model_spec.init_param;
-model_num = model_spec.model;
-bounds = model_spec.bounds;
+    %kern_param = [0.01,0.4];
+    init_param = model_spec.init_param;
+    model_num = model_spec.model;
+    bounds = model_spec.bounds;
 
-%trans_step = [0.08,0.08,0.08];
-trans_step = model_spec.trans_step;
+    %trans_step = [0.08,0.08,0.08];
+    trans_step = model_spec.trans_step;
 
-Y_m = mean(obs_X);
-%Y_sd = std(obs_X);
-%Feat = [Y_m, Y_sd];
+    Y_m = mean(obs_X);
+    %Y_sd = std(obs_X);
+    %Feat = [Y_m, Y_sd];
 
 
-[theta_list, X] = getIniX2(a,param_range,chkt,S0, num_rep,time_update, L, constraint);
+    [theta_list, X] = getIniX2(a,dt_range,p_range,chkt,S0, num_rep,time_update, L, constraint);
 
-J = size(Y_m,2); % number of the features
-[param, model] = mleHomGP(theta_list,X,init_param,bounds);
-%[param_sd, model_sd] = mleHomGP(theta_list, std(X,[],3), init_param,bounds);
-
-theta_old = model_spec.theta_old;
-
-Sample = NaN(N,p);
-    
-%h = waitbar(0,'Please wait...');
-for ss =  1:N
-    if mod(ss, time_update) == 0 % screen print to show progress.
-       fprintf(['ss=', int2str(ss),'\n']);
+    J = size(Y_m,2); % number of the features
+    [param, model] = mleHomGP(theta_list,X,init_param,bounds);
+    %[param_sd, model_sd] = mleHomGP(theta_list, std(X,[],3), init_param,bounds);
+    if length(dt_range) == 1
+        theta_old = model_spec.p_old;
+    else
+        theta_old = [model_spec.dt_old model_spec.p_old];
     end
+
+    Sample = NaN(N,p);
+    
+    %h = waitbar(0,'Please wait...');
+    for ss =  1:N
+        if mod(ss, time_update) == 0 % screen print to show progress.
+            fprintf(['ss=', int2str(ss),'\n']);
+        end
     [theta_new,param_range_new] = get_theta(model_num,trans_step,theta_old,param_range, constraint);
     theta = [theta_new;theta_old];
     

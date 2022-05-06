@@ -2,6 +2,7 @@
 %% This function is for piece-wise constant mutation rates
 %% Input: a: exponential rate
 %%        mu: mutation rate
+%%        t_d: the changing point
 %%        chkt: time checking point for counting mutants.
 %% Output: Nt: population size at time t
 %%         Xt: number of mutants.
