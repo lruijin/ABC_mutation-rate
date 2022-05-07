@@ -18,7 +18,7 @@ This software package includes the source code (mostly in MATLAB) for our manusc
 Codes and instructions are in the folder `code_rev`.
 
 ## II. Simulation study 2
-* For large mutation rate 'simulation2_main.m':
+* For large mutation rate `simulation2_main.m`:
     * Step 1: Generate fluctuation data from bMBP model with piecewise constant mutation rates, using function countsizeBDtree2.m.
     * Step 2: Source functions by
         * set the current folder as the working directory,
