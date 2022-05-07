@@ -12,7 +12,7 @@ Z = sum(geornd(exp(-a * tp) .* ones(1, Z0)));
 M = round(Z * p); % using binornd(Z, p) is too time consuming
 if M > 0
     arrtime_vec = log(unifrnd(0, 1, 1, M) .* (exp(a * tp) - 1) + 1) ./ a;
-    arrtime_vec = repelem(arrtime_vec, 2); %%% pre-division mutation
+    %arrtime_vec = repelem(arrtime_vec, 2); %%% pre-division mutation
     X = sum(geornd(exp(-(a * delta) .* (tp - arrtime_vec)))) + M;
 else
     X = 0;
