@@ -5,7 +5,7 @@ This folder includes the source code for ABC estimators designed for small mutat
 * fluc_exp1_rev: simulator, generate fluctuation data for multiple parallel cultures based on constant mutation rate assumption.
 * MOMMLE_fluc_exp1: calculate point estimation of MOM/MLE estimator.
 * BootCI_fluc_exp1: calculate empirical confidence interval of MOM/MLE estimation using bootstrap method.
-* ABC_mu1: calculate  
+* ABC_mu1: GPS-ABC estimator based on constant mutatation rate assumption.
 
 ## II. Simulation study 2
 
