@@ -1,5 +1,5 @@
 function [Z_vec, X_vec] = fluc_exp2_rev(Z0, a, delta, p1, p2, tj, tp, J)
-% Generate fluctuation data for parallel cultures based on constant mutation rate assumption
+% Generate fluctuation data for parallel cultures based on piece-wise mutation rate assumption
 % Z0: # of non-mutants at t = 0
 % a: rate parameter of exponential life time for non-mutants
 % delta: growth parameter for mutants relative to non-mutants
