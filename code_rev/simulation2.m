@@ -12,7 +12,9 @@
   % Total number of cultures
   L = 1;
   nmc = 100;
-
+  % setup data path and result path
+  dataPath = '/data/Lu/ABC/data/simu2';
+  resultPath = '/data/Lu/ABC/result/simu2';
 %%%%%%%%%%%%%%%%%%%%%%%%% Step 2: Generate fluctuation data %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   % Get multiple local workers
   POOL = parpool('local',20);
@@ -41,7 +43,7 @@
     MOM = 0.5*(1-log(mean(Nt)-mean(Xt))/log(mean(Nt)));
 % save simulated data, including Nt, Xt, obs_X and MOM
     duration = toc(startTime);
-    save(strcat('/data/ZChenLab/Lu/ABC/data/post/Y2_',num2str(seed),'.mat'),'Nt','Xt','obs_X','MOM','duration');
+    save(strcat(dataPath,'/Y2_',num2str(seed),'.mat'),'Nt','Xt','obs_X','MOM','duration');
   end
   delete(POOL);
 
@@ -93,11 +95,11 @@ addpath('~/ABC/code/optim/Matlab')
 
 %POOL = parpool('local',20);                  % always keep this as ABC_mu* functions contain parallel computations for fitting GP model.
 for seed = 2:100                             % change seed range to run less cases, each takes around 40 minutes.
-    load(strcat('/data/ZChenLab/Lu/ABC/data/post/Y2_',num2str(seed),'.mat'))
+    load(strcat(dataPath, '/Y2_',num2str(seed),'.mat'))
     theta_mu = [0 log10(MOM) log10(MOM)+1 14];   % Initial value corresponding to MOM estimator`
     [sample, runningTime, initTime] = ABC_mu2a(theta_mu, theta_sigma, dt_range, p_range, obs_X, model_spec);
     acc_rate = sum(diff(sample)~=0) / model_spec.N;
     % save the sample with its model specification, acceptance rate and running time.
-    save(strcat('/data/ZChenLab/Lu/ABC/result/post/sample1_',num2str(seed),'.mat'), 'model_spec','theta_mu','theta_sigma','sample','runningTime','dt_range','p_range');
+    save(strcat(resultPath,'/sample1_',num2str(seed),'.mat'), 'model_spec','theta_mu','theta_sigma','sample','runningTime','dt_range','p_range');
 end
 delete(POOL);

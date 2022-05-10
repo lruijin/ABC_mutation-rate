@@ -7,7 +7,10 @@ function H = simulation2_server(seed)
   addpath('~/ABC/code/lightspeed')
   % This folder contains functions for optimization, which is for estimating hyperparameters in GP models
   addpath('~/ABC/code/optim/Matlab')
-
+  
+  dataPath = '/data/Lu/ABC/data/simu2';
+  resultPath = '/data/Lu/ABC/result/simu2';
+  
   %%%%%%%%% Step 1: Model specifications for the ABC estimator %%%%%%%%%%%%%%%%%%%
   theta_sigma = [20 20 20 20];        % sd of prior distribution
   p_range = [-11 -7; -11 -7; 4 18];            % range for the three parameters 
@@ -42,11 +45,11 @@ function H = simulation2_server(seed)
   %%%%%%%%% Step 2: Piece-wise constant mutation rates estimation %%%%%%%%%%%%%%%%%%%
 
   POOL = parpool('local',10);                  % always keep this as ABC_mu* functions contain parallel computations for fitting GP model.
-    load(strcat('/data/ZChenLab/Lu/ABC/data/post/Y1_',num2str(seed),'.mat'))
+    load(strcat(dataPath, '/Y1_',num2str(seed),'.mat'))
     theta_mu = [0 log10(MOM) log10(MOM)+1 14];   % Initial value corresponding to MOM estimator`
     [sample, runningTime, initTime] = ABC_mu2a(theta_mu, theta_sigma, dt_range, p_range, obs_X, model_spec);
     acc_rate = sum(diff(sample)~=0) / model_spec.N;
     % save the sample with its model specification, acceptance rate and running time.
-    save(strcat('/data/ZChenLab/Lu/ABC/result/post/sample1_',num2str(seed),'.mat'), 'model_spec','theta_mu','theta_sigma','sample','runningTime','dt_range','p_range');
+    save(strcat(resultPath, '/sample1_',num2str(seed),'.mat'), 'model_spec','theta_mu','theta_sigma','sample','runningTime','dt_range','p_range');
   delete(POOL);
   H = 1;

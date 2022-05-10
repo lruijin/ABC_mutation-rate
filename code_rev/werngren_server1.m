@@ -7,7 +7,7 @@ function H = werngren_server1(dataName,trans_step,initValue, a, N)
   addpath('~/ABC/code/lightspeed')
   % This folder contains functions for optimization, which is for estimating hyperparameters in GP models
   addpath('~/ABC/code/optim/Matlab')
-  
+  resultPath = '/data/Lu/ABC/werngren';
   % Load data
   load(strcat(dataName,'.mat'))
   if initValue == 1
@@ -50,6 +50,6 @@ function H = werngren_server1(dataName,trans_step,initValue, a, N)
     acc_rate = sum(diff(sample)~=0) / model_spec.N;
     delete(POOL)
 
-    save(strcat('/data/ZChenLab/Lu/ABC/werngren/sample_a',num2str(a),"_",dataName,'_',num2str(initValue),'_m1.mat'),'model_spec','theta_mu','theta_sigma','acc_rate',...
+    save(strcat(resultPath,'/sample_a',num2str(a),"_",dataName,'_',num2str(initValue),'_m1.mat'),'model_spec','theta_mu','theta_sigma','acc_rate',...
     'MOM','MLE','sample','runningTime','p_range');
     H = 1;

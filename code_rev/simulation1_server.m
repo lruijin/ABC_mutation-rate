@@ -1,3 +1,8 @@
+% This function runs one replicate of simulation study 1 for GPS-ABC estimator
+% 100 datasets have already been generated in simulation1.m file
+% Input: seed: the random seed to find the dataset
+%        p: 4,5,6,7,or8, is -log10(mutation prob.)
+%        Jcase: =1, 10 parallel cultures; =2, 50 cultures; =3, 100 cultures
 function H = simulation1_server(seed, p, Jcase)
   % including folders containing functions to be used
   % The main folder contains the functions to be directly used
