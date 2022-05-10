@@ -9,7 +9,7 @@ This folder includes the source code for ABC estimators designed for small mutat
 * ABC_MCMC: ABC-MCMC estimator based on constant mutation rate assumption.
 * simulation1: apply GPS-ABC estimator `ABC_mu1` on a simulated dataset.
 
-To replicate the results in the top part of Table 2, the following functions are used:
+To run 100 replicates and reproduce the results in the top part of Table 2, the following functions are used:
 * simulation1_server: a function to run one replicate in simulation 1 for mutation rate from 1e-8 to 1e-4 using GPS-ABC estimator.
 * simulation1_MCMC_server: a function to run one replicate in simulation study 1 for mutation rate from 1e-8 to 1e-4 using ABC-MCMC estimator.
 * simu1_bootCI: calculates the confidence interval of MOM/MLE for simulation study 1.
@@ -20,7 +20,7 @@ To replicate the results in the top part of Table 2, the following functions are
 * ABC_mu2a: GPS-ABC estimator based on the assumption of piece-wise constant mutation rate and differential growth between mutants and normal cells.
 * simulation2: apply GPS-ABC estimator defined in `ABC_mu2a` on a simulated dataset.
 
-To replicate the results in Simulation Study 2, the following functions are used:
+To run 100 replicates and reproduce the results in Simulation Study 2, the following functions are used:
 * simulation2_server: a function to run one replicate in simulation study 1 using GPS-ABC estimator.
 * post/init_2a.mat: initial training samples for fitting GP surrogate model.
 *Note*: The detailed model specifications are described as comments in the script.    
