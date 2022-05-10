@@ -60,7 +60,7 @@ function [Sample, runningTime, initTime] = ABC_mu1(theta_mu, theta_sigma, a_dt, 
       [param_sd, model_sd] = mleHomGP(theta_list_s, std(X,[],3), init_param,bounds);
       initTime = toc(startTime);
       if model_spec.saveSample == 1
-        save('post/simu1/init1_p4.mat','theta_list', 'theta_list_s', "X", "initTime",'param','model','param_sd','model_sd');
+        save(model_spec.saveSamplePath,'theta_list', 'theta_list_s', "X", "initTime",'param','model','param_sd','model_sd');
       end
     else
       load(model_spec.init);

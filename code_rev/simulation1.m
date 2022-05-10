@@ -2,15 +2,20 @@
   %%%%%%%%%%%%%%%%%%%%%%%%% Step 1: Set the hyperparameters %%%%%%%%%%%%%%%%%%%
   % Exponential rate parameter a, typically 1 
     a = 1; % may change a to other values
-    p = 1e-4;
+    p = 1e-4; % change it to other values such as 1e-5,1e-6, 1e-7 and 1e-8.
     c = 100;
     Z0 = 1; % may change Z0 to other values
+    % Calculate the plating time for the current setting to obtain the expected 
+    % number of mutants as 20.
     myfun = @(t, Z0, a, p, c) Z0 * (exp(a * t) - exp(a * t * (1 - 2 * p))) - c;
     fun = @(t) myfun(t, Z0, a, p, c);
     tp = fzero(fun, 20);
     L = 1;
     nmcs=[10 50 100];
 %%%%%%%%%%%%%%%%%%%%%%%%% Step 2: Generate fluctuation data %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+dataPath = '/data/Lu/ABC/data/simu1';
+resultPath = '/data/Lu/ABC/result/simu1';
+
   % Get multiple local workers
 POOL = parpool('local',10);
 nSimu = 100;
@@ -40,14 +45,19 @@ for seed = 1:nSimu;
     [MOM MLE] = MOMMLE_fluc_exp1(Nt, Xt);
     
     % save simulated data, including Nt, Xt, obs_X and MOM
+    % Each mutation rate has its own folder to save the data
+    % J = 10, 50 and 100 corresponds to Y1, Y2 and Y3, respectively.
+    % Yk_i(k = 1,2,3) is the i th Yk generated from seed i, here we have i = 1:100
     duration = toc(startTime);
-      save(strcat('/data/ZChenLab/Lu/ABC/data/simu1/p4/Y',num2str(k),'_', ...
+      save(strcat(dataPath,'/p4/Y',num2str(k),'_', ...
       num2str(seed),'.mat'),'Nt','Xt','obs_X','MOM','MLE','tp','duration');
   end
 end
 delete(POOL);
 
-%%%%%%%%%%%%%%%%%% Part 2: Estimating piecewise constant mutation rates %%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%% Part 2: Constant mutation rate estimation %%%%%%%%%%%%%%%%
+%%%%% Use these codes to run a short chain for determining the stepwidth.
+%%%%% And save the initial training set for other replicates under the same setting.
   % including folders containing functions to be used
 % The main folder contains the functions to be directly used
 clear;
@@ -71,7 +81,8 @@ model_spec.M = 100;                            % Number of samples drawn from th
 model_spec.N = 3000;                          % Total number of samples to be drawn from the posterior
 model_spec.a = 1;                              % Hyperparameter of the geo dist, known, same as the one to generate data
 model_spec.Z0 = 1;                              % Number of cultures in one sample, 1 culture per sample in simulation.
-model_spec.saveSample = 0;
+model_spec.saveSample = 1;
+model_sepc.saveSamplePath = strcat('post/simu1/init1_p',num2str(-log10(p)),'.mat');
 model_spec.num_rep = 10;                       % The number of replications at each setting 
 model_spec.time_update = 500;                 % The number to update process onto the screen
 model_spec.constraint = 0;
@@ -86,17 +97,20 @@ model_spec.constraint = 0;
     model_spec.trans_step = 0.35;         % The transition steps of the MCMC algorithm 
     model_spec.theta_old = -8;    % t_d = 4  % The initial value of the three parameters
     
-    model_spec.init = 'post/simu1/init1_p8.mat';
+    model_spec.init = 0;
 %%%%%%%%% Step 2: Piece-wise constant mutation rates estimation %%%%%%%%%%%%%%%%%%%
 
-%POOL = parpool('local',20);                  % always keep this as ABC_mu* functions contain parallel computations for fitting GP model.
-for seed = 2:100                             % change seed range to run less cases, each takes around 40 minutes.
-    load(strcat('/data/ZChenLab/Lu/ABC/data/simu1/p8/Y1_',num2str(seed),'.mat'))
+POOL = parpool('local',10);                  % always keep this as ABC_mu* functions contain parallel computations for fitting GP model.
+%for seed = 2:100                             % change seed range to run less cases, each takes around 40 minutes.
+    seed = 1;
+     % Y1 corresponds to 10 parallel cultures, change to Y2 for 50 cultures or to Y3 for 100 cultures
+    load(strcat(dataPath,'/p',num2str(-log10(p)),'/Y1_',num2str(seed),'.mat'))
     model_spec.chkt = tp;
     theta_mu = log10(MOM);   % Initial value corresponding to MOM estimator`
     [sample, runningTime, initTime] = ABC_mu1(theta_mu, theta_sigma, 1, p_range, sqrt(obs_X), model_spec);
+    % If acc_rate is not smaller than 20%, shorten the step width; If it is larger than 40%, increase the step width.
     acc_rate = sum(diff(sample(:,1))~=0) / model_spec.N;
     % save the sample with its model specification, acceptance rate and running time.
-    save(strcat('/data/ZChenLab/Lu/ABC/result/post/sample1_',num2str(seed),'.mat'), 'model_spec','theta_mu','theta_sigma','sample','runningTime','dt_range','p_range');
-end
+    save(strcat(resultPath,'/p',num2str(-log10(p)),'/sample1_',num2str(seed),'.mat'), 'model_spec','theta_mu','theta_sigma','sample','runningTime','dt_range','p_range');
+%end
 delete(POOL);
