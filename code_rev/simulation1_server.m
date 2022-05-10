@@ -8,7 +8,11 @@ function H = simulation1_server(seed, p, Jcase)
   addpath('~/ABC/code/lightspeed')
   % This folder contains functions for optimization, which is for estimating hyperparameters in GP models
   addpath('~/ABC/code/optim/Matlab')
-
+  
+  % setup data path
+  dataPath = '/data/Lu/ABC/data/simu1';
+  % setup result path
+  resultPath = '/data/Lu/ABC/result/simu1';
   %%%%%%%%% Step 1: Model specifications for the ABC estimator %%%%%%%%%%%%%%%%%%%
   theta_sigma = 20;        % sd of prior distribution
   if p == 8
@@ -52,14 +56,15 @@ function H = simulation1_server(seed, p, Jcase)
 
 POOL = parpool('local',10);                  % always keep this as ABC_mu* functions contain parallel computations for fitting GP model
 
-load(strcat('/data/ZChenLab/Lu/ABC/data/simu1/p',num2str(p), ...
+load(strcat(dataPath, '/p',num2str(p), ...
     '/Y',num2str(Jcase),'_',num2str(seed),'.mat'))
 model_spec.chkt = tp;
 theta_mu = log10(MOM);   % Initial value corresponding to MOM estimator`
 [sample, runningTime, initTime] = ABC_mu1(theta_mu, theta_sigma, 1, p_range, sqrt(obs_X), model_spec);
 acc_rate = sum(diff(sample(:,1))~=0) / model_spec.N;
 % save the sample with its model specification, acceptance rate and running time.
-save(strcat('/data/ZChenLab/Lu/ABC/result/simu1/p',num2str(p),'/sample', num2str(Jcase),...
+% each mutation rate has its own folder to save the result under resultPath.
+save(strcat(resultPath,'/p',num2str(p),'/sample', num2str(Jcase),...
       '_',num2str(seed),'.mat'), 'model_spec','theta_mu','theta_sigma','sample','runningTime','p_range');
 delete(POOL);
 H = 1;
