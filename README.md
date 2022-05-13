@@ -2,8 +2,8 @@
 
 This software package includes the source code (mostly in MATLAB) for our manuscript "Estimating mutation rates in a Markov branching process using approximate Bayesian computation". There are three parts in the package: I. ABC-based estimator and MOM/MLE in this main folder, II Simulation study 1 (for the constant mutation scenario) and Simulation study 2 (for the piece-wise constant mutation scenario) under subfolder `simulation`, and III. Real data analysis under subfolder `real`. 
 
-## ABC-based estimator under constatnt mutation rate assumption 
-* With "exact" simulator:
+## Contant mutation rate's estimators
+* ABC-based estimator with "exact" simulator:
     * ABC_fluc_exp1.m: Estimate mutation rate by ABC for fluctuation data with constant mutation rate. Used in `simulation/simu1A_cascades.m` and `simulation/simu1B_cascades.m`.
     * trainGPS.m: Train GPS model for fluctuation data with constant mutation rate. Used in ABC_fluc_exp1.m, also in demoGPS_fluc_exp1.m.
     * tnrnd.m: Generate random sample from truncated normal. Used in ABC_fluc_exp1.m.
@@ -11,7 +11,7 @@ This software package includes the source code (mostly in MATLAB) for our manusc
     * mut_bMBP.m: Generate (z, x) data in a single culture from bMBP model with constant mutation rate. Used in fluc_exp1.m.
     * selectstat_fluc_exp1.m: Compare the response curves of three different summary statistics (Fig. 1).
     * demoGPS_fluc_exp1.m: Demonstrate the performance of GP regression (Fig. 2).
-* With "fast" simulator
+* ABC-based estimator with "fast" simulator
     * ABC_mu1.m: GPS-ABC estimator based on constant mutation rate assumption.
     * ABC_MCMC.m: ABC-MCMC estimator based on constant mutation rate assumption.
     * ABC_mu1a.m: GPS-ABC estimator based on constatnt mutation rate assumption and allows differential growth between mutants and normal cells.
