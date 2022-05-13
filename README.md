@@ -4,7 +4,7 @@ This software package includes the source code (mostly in MATLAB) for our manusc
 
 ## Estimating a constant mutation rate
 * ABC-based estimator with "exact" simulator:
-    * **fluc_exp1.m: The "exact" simulation. Generate fluctuation data in parallel cultures from bMBP model with constant mutation rate. Used everywhere.
+    * **fluc_exp1.m: The "exact" simulation. Generate fluctuation data in parallel cultures from bMBP model with constant mutation rate. Used everywhere.**
     * **ABC_fluc_exp1.m: Estimate mutation rate by ABC for fluctuation data with constant mutation rate. Used in `simulation/simu1A_cascades.m` and `simulation/simu1B_cascades.m`.
     * trainGPS.m: Train GPS model for fluctuation data with constant mutation rate. Used in ABC_fluc_exp1.m, also in demoGPS_fluc_exp1.m.
     * tnrnd.m: Generate random sample from truncated normal. Used in ABC_fluc_exp1.m.
