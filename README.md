@@ -2,7 +2,7 @@
 
 This software package includes the source code (mostly in MATLAB) for our manuscript "Estimating mutation rates in a Markov branching process using approximate Bayesian computation". There are three parts in the package: I. ABC-based estimator and MOM/MLE in this main folder, II Simulation study 1 (for the constant mutation scenario) and Simulation study 2 (for the piece-wise constant mutation scenario) under subfolder `simulation`, and III. Real data analysis under subfolder `real`. 
 
-## Contant mutation rate's estimators
+## Estimating a constant mutation rate
 * ABC-based estimator with "exact" simulator:
     * ABC_fluc_exp1.m: Estimate mutation rate by ABC for fluctuation data with constant mutation rate. Used in `simulation/simu1A_cascades.m` and `simulation/simu1B_cascades.m`.
     * trainGPS.m: Train GPS model for fluctuation data with constant mutation rate. Used in ABC_fluc_exp1.m, also in demoGPS_fluc_exp1.m.
@@ -18,10 +18,7 @@ This software package includes the source code (mostly in MATLAB) for our manusc
 * MOM/MLE estimator:
     * MOMMLE_fluc_exp1.m: Estimate mutation rate by MOM and MLE for fluctuation data with constant mutation rate. Used in simu1B_cascades.m.
 
-* For small mutation rate:
-Codes and instructions are in the folder `code_rev`.
-
-## II. Simulation study 2
+## Estimating piece-wise constant mutation rates
 * For large mutation rate `simulation2_main.m`:
     * Step 1: Generate fluctuation data from bMBP model with piecewise constant mutation rates, using function countsizeBDtree2.m.
     * Step 2: Source functions by
