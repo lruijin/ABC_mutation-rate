@@ -49,7 +49,7 @@ function H = simulation2_server(seed,caseNo)
   %model_spec.trans_step = [0.6 1.3 1.3 1.8];         % The transition steps of the MCMC algorithm 
   %model_spec.theta_old = [log10(0.8) -9 log10(5e-8) 14];    % t_d = 4  % The initial value of the three parameters
 
-  model_spec.init = 'post/init_2a.mat';
+  model_spec.init = 'training/init_2a.mat';
   %%%%%%%%% Step 2: Piece-wise constant mutation rates estimation %%%%%%%%%%%%%%%%%%%
 
   POOL = parpool('local',10);                  % always keep this as ABC_mu* functions contain parallel computations for fitting GP model.
