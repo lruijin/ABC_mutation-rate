@@ -5,23 +5,25 @@ This software package includes the source code (mostly in MATLAB) for our manusc
 ## Estimating a constant mutation rate
 * ABC-based estimator with "exact" simulator:
     * **fluc_exp1.m: The "exact" simulation. Generate fluctuation data in parallel cultures from bMBP model with constant mutation rate. Used everywhere.**
-    * **ABC_fluc_exp1.m: Estimate mutation rate by ABC for fluctuation data with constant mutation rate. Used in `simulation/simu1A_cascades.m` and `simulation/simu1B_cascades.m`.
+    * **ABC_fluc_exp1.m: Estimate mutation rate by ABC for fluctuation data with constant mutation rate. Used in `simulation/simu1A_cascades.m` and `simulation/simu1B_cascades.m`.**
     * trainGPS.m: Train GPS model for fluctuation data with constant mutation rate. Used in ABC_fluc_exp1.m, also in demoGPS_fluc_exp1.m.
     * tnrnd.m: Generate random sample from truncated normal. Used in ABC_fluc_exp1.m.
     * mut_bMBP.m: Generate (z, x) data in a single culture from bMBP model with constant mutation rate. Used in fluc_exp1.m.
     * selectstat_fluc_exp1.m: Compare the response curves of three different summary statistics (Fig. 1).
     * demoGPS_fluc_exp1.m: Demonstrate the performance of GP regression (Fig. 2).
 * ABC-based estimator with "fast" simulator
-    * **fluc_exp1_rev.m: The "fast" simulator. Generate fluctuation data in parallel cultures from approximated bMBP model with constant mutation rate. Used everywhere.
-    * **ABC_mu1.m: GPS-ABC estimator based on constant mutation rate assumption. Used in `simulation/simulation1_server` and `real/werngren_server1`.
-    * **ABC_MCMC.m: ABC-MCMC estimator based on constant mutation rate assumption. Used in `simulation/simulation1_MCMC_server`.
-    * **ABC_mu1a.m: GPS-ABC estimator based on constatnt mutation rate assumption and allows differential growth between mutants and normal cells. Used in `real/werngren_server1a`.
+    * **fluc_exp1_rev.m: The "fast" simulator. Generate fluctuation data in parallel cultures from approximated bMBP model with constant mutation rate. Differential growth between mutants and normal cells is allowed. Used everywhere.**
+    * **ABC_mu1.m: GPS-ABC estimator based on constant mutation rate assumption. Used in `simulation/simulation1_server` and `real/werngren_server1`.**
+    * **ABC_MCMC.m: ABC-MCMC estimator based on constant mutation rate assumption. Used in `simulation/simulation1_MCMC_server`.**
+    * **ABC_mu1a.m: GPS-ABC estimator to esimate constatnt mutation rate and relative growth rate of mutants vs. normal cells. Used in `real/werngren_server1a`.**
     * get_IniX1*.m: Generate initial training samples for fitting GP surrogate model. Used in ABC_mu1*.m. 
+    * get_theta1.m and get_theta1a.m: Propose from the proposal distribution. Used in `ABC_mu1.m` and `ABC_mu1a.m`, respectively.
+    * get_theta1a.m: Propose from the proposdal distributon.
     * tnorm.m: Generate random sample from truncated normal. Used in ABC_mu*.m
     * unconditionError: Calculate unconditional error of making an accpet/reject decision. Used in ABC_mu*.m
-    * 
+    * mut_bMBP_rev: Generate approximated (z, x) data in a single culture based on the conditional distribution of the occurring time of mutations.
 * MOM/MLE estimator:
-    * MOMMLE_fluc_exp1.m: Estimate mutation rate by MOM and MLE for fluctuation data with constant mutation rate. Used in simu1B_cascades.m.
+    * **MOMMLE_fluc_exp1.m: Estimate mutation rate by MOM and MLE for fluctuation data with constant mutation rate. Used in simu1B_cascades.m.**
 
 ## Estimating piece-wise constant mutation rates
 * For large mutation rate `simulation2_main.m`:
