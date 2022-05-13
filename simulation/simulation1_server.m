@@ -3,10 +3,14 @@
 % Input: seed: the random seed to find the dataset
 %        p: 4,5,6,7,or8, is -log10(mutation prob.)
 %        Jcase: =1, 10 parallel cultures; =2, 50 cultures; =3, 100 cultures
+% repeat calling this function with different setups by varying seed, p and Jcase on server using the following line:
+% Use swarm to run them simultaneously.
+% matlab -nodisplay -nodesktop  -nosplash -r 'cd ~/ABC_mutation_rate/simulation; simulation1_server(seed,p,Jcase); exit;'
+
 function H = simulation1_server(seed, p, Jcase)
   % including folders containing functions to be used
   % The main folder contains the functions to be directly used
-  cd('~/ABC/code_rev')
+  cd('~/ABC_mutation_rate')
   % This folder contains the functions needed for fitting GP models
   addpath('~/ABC/code/kernel')
   % This folder contains functions for quick matrix operations

@@ -1,6 +1,14 @@
-function H = simulation2_server(seed)
+% This function runs one replicate of simulation study 2 for GPS-ABC estimator
+% 100 datasets have already been generated in simulation2.m file
+% Input: seed: the random seed to find the dataset
+%        caseNo: =1, p1=1e-8, p2=1e-8; =2, p1=1e-9, p2=5e-8
+% repeat calling this function with different setups by varying seed and caseNo on server using the following line:
+% (Use swarm to run them simultaneously.)
+% matlab -nodisplay -nodesktop  -nosplash -r 'cd ~/ABC_mutation_rate/simulation; simulation2_server(seed, caseNo); exit;'
+
+function H = simulation2_server(seed,caseNo)
   H = 0;
-  cd('~/ABC/code_rev')
+  cd('~/ABC_mutation_rate')
   % This folder contains the functions needed for fitting GP models
   addpath('~/ABC/code/kernel')
   % This folder contains functions for quick matrix operations
@@ -45,11 +53,11 @@ function H = simulation2_server(seed)
   %%%%%%%%% Step 2: Piece-wise constant mutation rates estimation %%%%%%%%%%%%%%%%%%%
 
   POOL = parpool('local',10);                  % always keep this as ABC_mu* functions contain parallel computations for fitting GP model.
-    load(strcat(dataPath, '/Y1_',num2str(seed),'.mat'))
+    load(strcat(dataPath, '/Y',num2str(caseNo),'_',num2str(seed),'.mat'))
     theta_mu = [0 log10(MOM) log10(MOM)+1 14];   % Initial value corresponding to MOM estimator`
     [sample, runningTime, initTime] = ABC_mu2a(theta_mu, theta_sigma, dt_range, p_range, obs_X, model_spec);
     acc_rate = sum(diff(sample)~=0) / model_spec.N;
     % save the sample with its model specification, acceptance rate and running time.
-    save(strcat(resultPath, '/sample1_',num2str(seed),'.mat'), 'model_spec','theta_mu','theta_sigma','sample','runningTime','dt_range','p_range');
+    save(strcat(resultPath, '/sample',num2str(caseNo),'_',num2str(seed),'.mat'), 'model_spec','theta_mu','theta_sigma','sample','runningTime','dt_range','p_range');
   delete(POOL);
   H = 1;

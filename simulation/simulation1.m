@@ -13,6 +13,9 @@
     L = 1;
     nmcs=[10 50 100];
 %%%%%%%%%%%%%%%%%%%%%%%%% Step 2: Generate fluctuation data %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Set the current directory to the folder containing simulators and esimators.
+cd('~/ABC_mutation_rate');
+% Set the directory for saving data and estimation results.
 dataPath = '/data/Lu/ABC/data/simu1';
 resultPath = '/data/Lu/ABC/result/simu1';
 
@@ -61,7 +64,7 @@ delete(POOL);
   % including folders containing functions to be used
 % The main folder contains the functions to be directly used
 clear;
-cd('~/ABC/code_rev')
+cd('~/ABC_mutation_rate');
 % This folder contains the functions needed for fitting GP models
 addpath('~/ABC/code/kernel')
 % This folder contains functions for quick matrix operations
