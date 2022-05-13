@@ -26,7 +26,9 @@ This software package includes the source code (mostly in MATLAB) for our manusc
 
 ## Estimating parameters in a piece-wise constant mutation rate function
 * ABC-based estimator with "exact" simulator:
+
    Functions and detailed instructions could be found in the subfolder `exact simulator`.
+   
 * ABC-based estimator with "fast" simulator
     * **fluc_exp2_rev.m**: The "fast" simulator with a piece-wise constant mutation rate. Generate fluctuation data in parallel cultures . Differential growth between mutants and normal cells is allowed. Used everywhere.
     * **ABC_mu2a.m**: GPS-ABC estimator to esimate four parameters in a piece-wise constatnt mutation rate function, p1, p2, transition time &tau; and relative growth rate &delta;. Used in `real/werngren_server2a`.
