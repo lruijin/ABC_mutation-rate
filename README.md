@@ -25,7 +25,7 @@ This software package includes the source code (mostly in MATLAB) for our manusc
 * MOM/MLE estimator:
     * **MOMMLE_fluc_exp1.m: Estimate mutation rate by MOM and MLE for fluctuation data with constant mutation rate. Used in simu1B_cascades.m.**
 
-## Estimating piece-wise constant mutation rates
+## Estimating parameters in a piece-wise constant mutation rate function
 * For large mutation rate `simulation2_main.m`:
     * Step 1: Generate fluctuation data from bMBP model with piecewise constant mutation rates, using function countsizeBDtree2.m.
     * Step 2: Source functions by
