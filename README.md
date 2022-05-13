@@ -1,19 +1,22 @@
 # Code for "Estimating mutation rates in a Markov branching process using approximate Bayesian computation"
 
-This software package includes the source code (mostly in MATLAB) for our manuscript "Estimating mutation rates in a Markov branching process using approximate Bayesian computation". This package includes two sets of ABC estimators based on the "exact" simulator and the fast simulator, respectively. When mutation rates are at the scale less than < 10^{-5}, the exact simulators `mut_bMBP.m` and `countsizeBDtree2.m` are very slow. Estimators based on the fast simulator in folder `code_rev` are then used. There are three parts in the package: I. Simulation study 1 (for the constant mutation scenario), II. Simulation study 2 (for the piece-wise constant mutation scenario), and III. Real data analysis. 
+This software package includes the source code (mostly in MATLAB) for our manuscript "Estimating mutation rates in a Markov branching process using approximate Bayesian computation". There are three parts in the package: I. ABC-based estimator and MOM/MLE in this main folder, II Simulation study 1 (for the constant mutation scenario) and Simulation study 2 (for the piece-wise constant mutation scenario) under subfolder `simulation`, and III. Real data analysis under subfolder `real`. 
 
-## I. Simulation study 1
-* For large mutation rate:
-    * simu1B_cascades.m: Simulation study 1 (for GPS-ABC). *Note*: due to intensive computations, simu1B_cascades.m and simu1A_cascades.m run on servers.
-    * simu1A_cascades.m: Simulation study 1 (for ABC-MCMC). *Warning*: running ABC-MCMC in this simulation study takes significant amount of time.
-    * MOMMLE_fluc_exp1.m: Estimate mutation rate by MOM and MLE for fluctuation data with constant mutation rate. Used in simu1B_cascades.m.
-    * ABC_fluc_exp1.m: Estimate mutation rate by ABC for fluctuation data with constant mutation rate. Used in simu1A_cascades.m and simu1B_cascades.m.
+## ABC-based estimator under constatnt mutation rate assumption 
+* With "exact" simulator:
+    * ABC_fluc_exp1.m: Estimate mutation rate by ABC for fluctuation data with constant mutation rate. Used in `simulation/simu1A_cascades.m` and `simulation/simu1B_cascades.m`.
     * trainGPS.m: Train GPS model for fluctuation data with constant mutation rate. Used in ABC_fluc_exp1.m, also in demoGPS_fluc_exp1.m.
     * tnrnd.m: Generate random sample from truncated normal. Used in ABC_fluc_exp1.m.
     * fluc_exp1.m: Generate fluctuation data in parallel cultures from bMBP model with constant mutation rate. Used everywhere.
     * mut_bMBP.m: Generate (z, x) data in a single culture from bMBP model with constant mutation rate. Used in fluc_exp1.m.
     * selectstat_fluc_exp1.m: Compare the response curves of three different summary statistics (Fig. 1).
     * demoGPS_fluc_exp1.m: Demonstrate the performance of GP regression (Fig. 2).
+* With "fast" simulator
+    * ABC_mu1.m: GPS-ABC estimator based on constant mutation rate assumption.
+    * ABC_MCMC.m: ABC-MCMC estimator based on constant mutation rate assumption.
+    * ABC_mu1a.m: GPS-ABC estimator based on constatnt mutation rate assumption and allows differential growth between mutants and normal cells.
+* MOM/MLE estimator:
+    * MOMMLE_fluc_exp1.m: Estimate mutation rate by MOM and MLE for fluctuation data with constant mutation rate. Used in simu1B_cascades.m.
 
 * For small mutation rate:
 Codes and instructions are in the folder `code_rev`.
