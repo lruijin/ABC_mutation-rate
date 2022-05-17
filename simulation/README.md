@@ -9,10 +9,8 @@ This folder includes the source code for the two simulation studies
     * simulation1: Generate 100 simulated dataset using the "fast" simulator and apply GPS-ABC estimator `ABC_mu1` on a simulated dataset on one of them.
     * simulation1_server: a function to run one replicate in simulation 1 for mutation rate from 1e-8 to 1e-4 using GPS-ABC estimator.
     * simulation1_MCMC_server: a function to run one replicate in simulation study 1 for mutation rate from 1e-8 to 1e-4 using ABC-MCMC estimator.
-* MOM/MLE estimator's confidence interval:
-    * BootCI_fluc_exp1: calculate empirical confidence interval of MOM/MLE estimation using bootstrap method.
-    * simu1_bootCI: calculates the confidence interval of MOM/MLE for simulation study 1.
-    * ../traning/simu1/*.mat : initial training samples for fitting GP surrogate model.
+   
+* ../traning/simu1/*.mat : initial training samples for fitting GP surrogate model.
 
 *Note*: To run 100 replicates on server, detailed instructions are given in the header comments of the scripts.
 
